@@ -5,11 +5,12 @@ module.exports = {
 
     const [count] = await connection('incidents').count();
 
+    const arrSelect = ['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'city', 'uf'];
     const incidents = await connection('incidents')
-      .join('ongs', 'ong_id', '=', 'incidents.ong_id')
+      .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
       .limit(5)
       .offset(5 * (page - 1))
-      .select(['incidents.*', 'ongs.name', 'ongs.email', 'ongs.whatsapp', 'city', 'uf']);
+      .select(arrSelect);
 
     res.header('X-Total-Count', count['count(*)']);
     return res.json(incidents);
